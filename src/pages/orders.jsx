@@ -1,7 +1,7 @@
-import Order from '@/components/order';
-import { fetchOrders } from '@/lib/axios';
-import React, { useEffect, useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import Order from "@/components/order";
+import { fetchOrders } from "@/lib/axios";
+import React, { useEffect, useState, useMemo } from "react";
+import { Link } from "react-router-dom";
 
 function Orders() {
   const [orders, setOrders] = useState([]);
@@ -22,14 +22,16 @@ function Orders() {
   }, []);
 
   const filteredOrders = useMemo(() => {
-    return orders.filter((order) =>
-     String(order.id).includes(search)
+    return orders.filter(
+      (order) =>
+        String(order.id).includes(search) ||
+        order.client_name?.toLowerCase().includes(search.toLowerCase()) ||
+        order.product_name?.toLowerCase().includes(search.toLowerCase())
     );
   }, [orders, search]);
 
   return (
     <div className="w-[90%] mx-auto mt-10">
-
       <div className="flex w-full justify-between items-center mb-5">
         <h2 className="text-2xl font-bold">Pedidos</h2>
 
@@ -41,7 +43,6 @@ function Orders() {
         </Link>
       </div>
 
-      {/* search */}
       <input
         type="text"
         placeholder="Buscar pedido..."
@@ -50,9 +51,7 @@ function Orders() {
         className="mb-4 border p-2 rounded-lg w-full"
       />
 
-      {/* content */}
       <div className="flex flex-col justify-start items-center border border-gray-400 rounded-lg min-h-[50vh] w-full">
-
         {loading ? (
           <p className="mt-10">Carregando...</p>
         ) : error ? (
@@ -61,16 +60,17 @@ function Orders() {
           <p className="mt-10">Nenhum pedido encontrado</p>
         ) : (
           filteredOrders.map((order) => (
-           <Order
-                key={order.id}
-                orderId={order.id}
-                clientId={order.client_id}
-                productId={order.product_id}
-                quantity={order.quantity}
-/>
+            <Order
+              key={order.id}
+              orderId={order.id}
+              clientId={order.client_id}
+              clientName={order.client_name}
+              productId={order.product_id}
+              productName={order.product_name}
+              quantity={order.quantity}
+            />
           ))
         )}
-
       </div>
     </div>
   );
