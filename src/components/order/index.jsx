@@ -1,19 +1,42 @@
 import React, { useState } from "react";
-import OrderItem from "../order-item.jsx";
+import { Eye } from "lucide-react";
 
-function Order({ orderId }) {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+function Order({ id, clientId, productId, quantity }) {
+  const [open, setOpen] = useState(false);
 
   return (
-    <div className="flex w-full p-3 justify-between">
-      <div>id do pedido: {orderId}</div>
-      <div
-        onClick={() => setModalIsOpen(!modalIsOpen)}
-        className="px-2 text-[#646cff] font-medium cursor-pointer"
-      >
-        Ver
+    <div className="border border-slate-200 rounded-xl p-4 hover:bg-slate-50 transition">
+      
+      {/* RESUMO DO PEDIDO */}
+      <div className="flex items-center justify-between">
+        
+        <div>
+          <h3 className="font-semibold text-slate-800">
+            Pedido #{id}
+          </h3>
+
+          <p className="text-sm text-slate-500">
+            Cliente: {clientId} • Produto: {productId}
+          </p>
+        </div>
+
+        <button
+          onClick={() => setOpen(!open)}
+          className="w-9 h-9 flex items-center justify-center rounded-xl border border-slate-200 hover:bg-slate-100"
+        >
+          <Eye size={16} />
+        </button>
       </div>
-      {modalIsOpen && (<OrderItem orderId={orderId} handleClose={() => setModalIsOpen(false)}/>)}
+
+      {/* DETALHES */}
+      {open && (
+        <div className="mt-3 text-sm text-slate-600 space-y-1">
+          <p><strong>ID:</strong> {id}</p>
+          <p><strong>Cliente ID:</strong> {clientId}</p>
+          <p><strong>Produto ID:</strong> {productId}</p>
+          <p><strong>Quantidade:</strong> {quantity}</p>
+        </div>
+      )}
     </div>
   );
 }
